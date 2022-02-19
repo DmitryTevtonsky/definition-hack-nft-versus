@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Versus</title>
+    <link href="index.css" rel="stylesheet">
+</head>
+
+<body>
+    <section class="layout">
+        <header class="header">
+            <button id="showMyNft" class="button primary">
+                Мой NFT
+            </button>
+
+            <div class="logo">
+                <img src="logo.png" alt="logo image" />
+            </div>
+
+            <button id="signIn" class="button primary">
+                Войти
+            </button>
+        </header>
+
+        <main class="main">
+
+        <!-- MAIN PAGE -->
+        <section class="main-page" >
+            <div>
+                <h1 class="title">Мои NFT</h1>
+                <div id="my-nft-list" class="my-nft-list">
+                    <div class="my-nft">
+                        <img src="nft-avatar.png" />
+                        <h2 class="my-nft-name">Terminator</h2>
+                        <div class="my-nft-stats">
+                            <h4>Уровень: 10</h4>
+                            <h4>Побед: 10</h4>
+                        </div>
+                    </div>
+                    <div class="my-nft">
+                        <img src="nft-avatar.png" />
+                        <h2 class="my-nft-name">Terminator</h2>
+                        <div class="my-nft-stats">
+                            <h4>Уровень: 10</h4>
+                            <h4>Побед: 10</h4>
+                        </div>
+                    </div>
+                    <div class="my-nft">
+                        <img src="nft-avatar.png" />
+                        <h2 class="my-nft-name">Terminator</h2>
+                        <div class="my-nft-stats">
+                            <h4>Уровень: 10</h4>
+                            <h4>Побед: 10</h4>
+                        </div>
+                    </div>
+                    <div class="my-nft">
+                        <img src="nft-avatar.png" />
+                        <h2 class="my-nft-name">Terminator</h2>
+                        <div class="my-nft-stats">
+                            <h4>Уровень: 10</h4>
+                            <h4>Побед: 10</h4>
+                        </div>
+                    </div>
+                    <div class="my-nft">
+                        <img src="nft-avatar.png" />
+                        <h2 class="my-nft-name">Terminator</h2>
+                        <div class="my-nft-stats">
+                            <h4>Уровень: 10</h4>
+                            <h4>Побед: 10</h4>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <h1 class="title">Рейтинг</h1>
+                <div id="rating-list" class="rating-list">
+                    <div class="rating-nft">
+                        <h1 class="rating-nft-rate">1 место</h1>
+                        <img src="nft-avatar.png" />
+                        <h2 class="rating-nft-name">Terminator</h2>
+                        <div class="rating-nft-stats">
+                            <h4>Уровень: 10</h4>
+                            <h4>Побед: 10</h4>
+                        </div>
+                        <h4 class="rating-nft-rarible-link">
+                            <a href="#">Посмотреть на Rarible</a>
+                        </h4>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- NFT PAGE -->
+        <section class="nft" style="display: none">
+            <div class="nft-title">
+                <h1>Terminator</h1>
+                <button id="changeNft" class="button secondary">Выбрать другой</button>
+            </div>
+
+            <div class="nft-info">
+                <img id="myNftAvatar" src="nft-avatar.png" alt="nft image" />
+                <h3>Уровень: 1</h3>
+
+                <div class="nft-stats">
+                    <h4>
+                        <img src="stats.svg">
+                        Характеристики NFT
+                    </h4>
+                    <ul>
+                        <li>Рейтинг: 5</li>
+                        <li>Побед: 10</li>
+                        <li>Поражений: 4</li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Известность: 900/3000
+                            <progress class="progress" id="fame" max="3000" value="900"></progress>
+                        </li>
+                        <li>
+                            Самоуверенность: 160/200
+                            <progress class="progress" id="confidence" max="200" value="160"></progress>
+                        </li>
+                    </ul>
+                    <h4>
+                        <img src="attack.svg">
+                        Атака
+                    </h4>
+                    <ul>
+                        <li>Критика: 4</li>
+                        <li>Оскорбление: 6</li>
+                        <li>Насмешка: 2</li>
+                        <li>Провокация: 4</li>
+                    </ul>
+                    <h4>
+                        <img src="defense.svg">
+                        Защита
+                    </h4>
+                    <ul>
+                        <li>Находчивость: 7</li>
+                        <li>Самоирония: 2</li>
+                        <li>Стрессоустойчивость: 2</li>
+                    </ul>
+                    <h4>Нет нераспределенных очков навыков</h4>
+                </div>
+            </div>
+            <div class="nft-actions">
+                <div class="nft-controls">
+                    <div class="nft-controls__challenge-selection">
+                        <div class="radio-button">
+                            <input id="train-option" type="radio" name="radio" value="train" checked>
+                            <label for="train-option">Тренировка</label>
+                        </div>
+
+                        <div class="radio-button">
+                            <input id="fight-option" type="radio" name="radio" value="fight">
+                            <label for="fight-option">Дуэль</label>
+                        </div>
+                    </div>
+
+                    <div class="nft-controls__attacks-selection">
+                        <h2>Выберите атаки</h2>
+                        <div class="attacks">
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.png" /></button>
+                        </div>
+                        <h5 class="nft-controls__attacks-hint">Атакующие раунды чередуются в выбранной последовательности</h5>
+    
+                        <button id="sendToFight" class="button sent-to-fight">
+                            Отправить на дуэль
+                        </button>
+                        <div class="trapeze"></div>
+                    </div>
+
+                    <div class="nft-logs">
+                        <h3>События</h3>
+                        <ul class="messages">
+                            <li class="message system-message">
+                                X отправлена на свободный серфинг интернета
+                                16.02.22 в 12:05
+                            </li>
+                            <li class="message">
+                                <img src="enemy.png">
+                                <div class="message-content">
+                                    <span class="message-text">
+                                        Y применяет Насмешку и наносит 5 урона Самоуверенности X
+                                    </span>
+                                    <span class="message-time">17:53</span>
+                                </div>
+                                
+                            </li>
+                            <li class="message my-message">
+                                <img src="nft-avatar.png">
+                                <div class="message-content">
+                                    <span class="message-text">
+                                        X применяет Критику и наносит 10 урона Самоуверенности Y
+                                    </span>
+                                    <span class="message-time">17:53</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        </main>
+
+        <footer class="footer">
+            <button id="showRules" class="button primary">
+                Правила игры
+            </button>
+            <button id="close" class="button primary">
+                Закрыть
+            </button>
+        </footer>
+    </section>
+</body>
+
+</html>
