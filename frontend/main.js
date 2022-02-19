@@ -28,15 +28,108 @@
 //     wit: 1
 // }
 
+var nftList = [
+    {
+        id: 1,
+        image_src: 'https://lh3.googleusercontent.com/38DTUQF6ILml49Vx4JeQS7LJA5SB7u0psMrWIftYsZ0HJdY_PCmyljnjsFisskbELvgrzbc-AqWttSQqQBPPs1s7h_Y9r0gkm9PyfRA=w600',
+        name: 'Cosmodino #7149',
+        level: 2,
+        wins: 20
+    },
+    {
+        id: 2,
+        image_src: 'https://lh3.googleusercontent.com/Px3US6jM97FJX1cXf2M23sDCVB5RbEBUUNucbAZEb1E2_l95pDam-6CTiF6bhoDurcRRfZ0B9Pr19Gj27fyAszkYLGjGASy8GblzVA=w600',
+        name: 'Cosmodino #4157',
+        level: 4,
+        wins: 67
+    },
+    {
+        id: 3,
+        image_src: 'https://lh3.googleusercontent.com/mfW-QhrMPqP18mYe0jq4pSQowP5fRm4rR53yGsa2AzWuqrzv83pp-SUd_vZnsLHwsneP0BcC2rcCalbUwgNyhoHUHGdrTy8wGxub=w600',
+        name: 'Cosmodino #8157',
+        level: 5,
+        wins: 93
+    },
+    {
+        id: 4,
+        image_src: 'https://lh3.googleusercontent.com/0jvzjQN8wsISEWuWU0gEcblAKjcmgULJys0ZslO9Ohqxf0VNOlFU3k_UMNVQuzydXfGcmRVXZU8pFlNc0DkQpFc2__I42q9qZgKZEA=w600',
+        name: 'Cosmodino #4511',
+        level: 7,
+        wins: 124
+    },
+    {
+        id: 5,
+        image_src: 'https://lh3.googleusercontent.com/ObR3tqGYjATbgHH0_ck9ufByPxBlgOHrYkRANI4wG6-2vSppO9EZjWpF4FOVBmMBtF3lfH_ydK4wx_I2O0t8eFJy1mXHWIx6_Xgr3A=w600',
+        name: 'Cosmodino #7693',
+        level: 8,
+        wins: 210
+    },
+    {
+        id: 6,
+        image_src: 'https://lh3.googleusercontent.com/QD5ybUUexCRmtpzsgxtnJk-S-IUve8G9GVlT_fUnsuxDi4nniiaNEZPdAod09Fn6oMOd2iz1mV2EIw0PHZc_F383gjhbufJIG6YVgQ=w600',
+        name: 'Cosmodino #1401',
+        level: 10,
+        wins: 420
+    },
+];
+
+var nftRankings = [
+    {
+        id: 46,
+        image_src: 'https://lh3.googleusercontent.com/r3RnMoKTLfTbMbgo7YWd8raYJ_cSZ6uuzmfQN1GpOrUdIRDGNCZGCCo-fEFp7AiG1JrAp_5trLLgQ6G7vO0kDIkn3VK9O-tNkPunsg=w600',
+        name: 'HAPE #1290',
+        level: 25,
+        wins: 2250
+    },
+    {
+        id: 243,
+        image_src: 'https://lh3.googleusercontent.com/CwUb1JM29VDEq7FesPu9P4Iatvv7TJQm_VgP9TPC2rDOpiJSiodLFvfby317_3RNkL3oWym3X9d3xPmJVzS1-c2TlYapW5x05WRt8Z0=w600',
+        name: 'HAPE #1335',
+        level: 20,
+        wins: 1460
+    },
+    {
+        id: 74,
+        image_src: 'https://lh3.googleusercontent.com/wrb7pRkKJcFRGCLnfCHg6fdmw4MfoCeCHdTkLG_eztoZbM-Hw_9su4Do4wIp9sVJNXpC5VVVCUvBeiAGHhwSenCZUEU_Erk0j6lUUA=w600',
+        name: 'HAPE #4261',
+        level: 19,
+        wins: 1390
+    },
+    {
+        id: 77,
+        image_src: 'https://lh3.googleusercontent.com/IoVmPSyDr1MuyBY1TyuQswSaXLwQO3OWdIOvSGLl_ZAyEFLGrgo6UgAUjKZhdHzulu3PD8PXxiqvrxuzAfyllWhqU1QXkJQBxsXv=w600',
+        name: 'HAPE #7515',
+        level: 20,
+        wins: 1399
+    },
+    {
+        id: 125,
+        image_src: 'https://lh3.googleusercontent.com/ZKu4G3MRB8lsxSWbRzAv2PpdqIEVx96snJ1a2kREfT4ZVbIyKN9G47_kV3dZ7UOz_2ax6tGIuo-96yzc0jOUyf8bsNTvssnNraRS=w600',
+        name: 'HAPE #5381',
+        level: 17,
+        wins: 1201
+    },
+    {
+        id: 226,
+        image_src: 'https://lh3.googleusercontent.com/vtvjr0J2_psGUa-VS7nPvR_Vm8RUjois54wM5Wn_uSBS0L2vFeesBwuPOrCMsoPmShsuwOn8uf9bOngR6wfkRw4uxy-Fs2KzY51bwg=w600',
+        name: 'HAPE #3955',
+        level: 16,
+        wins: 1007
+    },
+];
+
 player1 = {
     name: "Игрок 1",
-    lv: 1,
-    exp: 99,
-    confidence: 20,
-    critic: 10,
+    lv: 4,
+    rating: 55,
+    victories: 111,
+    defeats: 44,
+    exp: 900,
+    confidence: 200,
+    critic: 9,
     insult: 10,
-    mockery: 10,
-    taunt: 10,
+    mockery: 11,
+    taunt: 12,
     stressRessistance: 10,
     selfIrony: 10,
     wit: 10,

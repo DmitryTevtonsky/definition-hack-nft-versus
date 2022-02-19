@@ -138,7 +138,7 @@ ul {
 
 .main {
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     padding: 1rem;
     width: 100%;
 }
@@ -164,11 +164,10 @@ ul {
 
 .my-nft-list {
     margin-bottom: 2rem;
-    display: grid;
-    grid-gap: 1rem;
-    grid-area: auto;
-    grid-template-columns: 1fr 1fr 1fr;
-    /* flex-wrap: wrap; */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
 }
 
 .my-nft {
@@ -181,6 +180,7 @@ ul {
 
 .my-nft img {
     width: auto;
+    max-width: 20rem;
 }
 
 .my-nft-name, .my-nft-stats {
@@ -204,10 +204,10 @@ ul {
 
 .rating-list {
     margin-bottom: 2rem;
-    display: grid;
-    grid-gap: 1rem;
-    grid-area: auto;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
     /* flex-wrap: wrap; */
 }
 
@@ -217,6 +217,11 @@ ul {
     border: 1px solid rgba(255, 255, 255, 0.21);;
     border-radius: 1rem;
     background: radial-gradient(47.31% 50.17% at 50% 55.87%, #555B62 0%, #121212 100%);
+}
+
+.rating-nft img {
+    width: auto;
+    max-width: 20rem;
 }
 
 .rating-nft-rate {
@@ -321,7 +326,12 @@ ul {
 
 .nft-stats li {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.nft-stats span {
+    margin-left: 0.5rem;
 }
 
 .progress {
