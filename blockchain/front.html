@@ -1,0 +1,709 @@
+<script>
+
+    //TODO
+    //страница галереи Эфира:
+    //подключаемся к метамаску
+    //получаем из Рарибл список NFT
+    
+    //страница галереи Теры:
+    //получаем список NFT через код:
+    //if(glUserAccount) Arr=await ACall(0,"GetNFTList",{Account:glUserAccount})
+    //await AGetBalance(glUserAccount,SMART.Num,ID);
+ 
+
+    ALL_ACCOUNTS=1;
+    var glUserAccount;
+    var glEthAddress;
+    //var currentNFT={};
+    var glNFTArr=[];
+    var glNFTMap={}
+    var glNFTRankings = [];
+    
+    
+    window.addEventListener('Event',function(e)
+    {
+        var Data=e.detail;
+        var Description=Data.Description;
+        if(Data.Error)
+        {
+            SetError(Description);
+        }
+        else
+        //messages from smart...
+        if(Description.cmd==="Battle")
+        {
+            var NFT=glNFTMap[Description.Params.ID];
+            if(NFT)
+            {
+               NFT.log=Description.Params.log;
+               RunLog(NFT);
+            }
+            console.log("Event:",Description);
+        }
+        else
+        if(Description.cmd==="Import")
+        {
+            var NFT=glNFTMap[Description.Params.ID];
+            if(NFT)
+                UpdateListGame();
+        }
+        
+    });
+    
+    
+    window.addEventListener('Init',async function()
+    {
+        if(SMART.Num===7)
+        {
+            //TEST MODE IN SANDBOX
+            OPEN_PATH=JSON.stringify({Account:100,ID:1234567});
+        }
+        
+
+        if(OPEN_PATH && OPEN_PATH.substr(0,1)==="{")
+        {
+            //Open from wallet (NFT inplace show mode)
+            ShowParams=JSON.parse(OPEN_PATH);
+            
+            glUserAccount=ShowParams.Account;
+        }
+       
+ 
+        
+    });
+    window.addEventListener('UpdateInfo',async function()
+    {
+        //USER_ACCOUNT
+        if(!glUserAccount)
+            glUserAccount=USER_ACCOUNT[USER_ACCOUNT.length-1].Num;
+
+    });
+    
+
+    
+    //Lib
+    async function RunSmart(Name,Params)
+    {
+        //смотрим есть ли счет у пользователя (glUserAccount), если нет, то сначала создаем
+        if(!glUserAccount)
+        {
+            SetStatus("Wait: creating account");
+            var RetCreate=await ACreateNewAccount(0);
+            glUserAccount=RetCreate.TR.result;
+            SetStatus("User account:",glUserAccount);
+        }
+        
+        var Ret=await ASendCall(0,Name,Params,[],glUserAccount);
+        
+        return Ret;
+    }
+    
+    
+    //tests
+
+    
+    //ETH
+    
+    async function ConnectMetaMask()
+    {
+        var res=await ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await ethereum.request({ method: 'eth_accounts' });
+        glEthAddress=accounts[0];
+        console.log("Eth address:",glEthAddress);
+    }
+    
+    async function UpdateListGame()
+    {
+        await FillGameNFT();
+        $("my-nft-list").innerHTML="";
+        $("rating-list").innerHTML="";
+        addDataToMainPage();
+    }
+    async function ConnectGame()
+    {
+        await UpdateListGame();
+    }
+    async function GetEthListNFT()
+    {
+        if(!glEthAddress)
+            await ConnectMetaMask();
+        var Addr="https://api-staging.rarible.org/v0.1/items/byOwner?owner=ETHEREUM:"+glEthAddress;
+        var response=await fetch(Addr, {method:'get', cache:'default', mode:'cors', credentials2:'include', headers:this.Headers});
+        var ret=await response.json();
+        return ret;
+    }
+    async function GetTeraArrtNFT()
+    {
+        
+        console.log("glUserAccount",glUserAccount);
+        var Arr=await ACall(0,"GetNFTList",{Account:glUserAccount});
+        //console.log("Arr",Arr);
+        
+        return Arr;
+    }
+    
+    async function FillGameNFT() 
+    {
+        var EthList=await GetEthListNFT();
+        var Arr=await GetTeraArrtNFT();
+        var TeraArr=await GetTeraArrtNFT();
+        var TeraMap=MapFromArr(TeraArr);
+        
+        
+        for(var i=0;i<EthList.total;i++)
+        {
+            var NFT=EthList.items[i];
+            var url_item=NFT.meta.content[0];
+            if(url_item && url_item.url)
+            {
+                var TeraNFT=TeraMap[NFT.id];
+                
+                
+                if(!TeraNFT)
+                {
+                    TeraNFT=
+                    {
+                        ID:NFT.id,
+                        url:url_item.url,
+                        name:NFT.meta.name,
+                        IsEth:1,
+                    };
+                    Arr.push(TeraNFT);
+                    //console.log("NFT2",TeraNFT);
+                }
+            }
+        }
+        
+        glNFTArr=Arr;
+        glNFTMap=MapFromArr(glNFTArr);
+    }
+    
+    async function MintNFT(item)
+    {
+        SetStatus("Import: "+item.name);
+        RunSmart("LazyBridgeMint",item);
+    }
+    
+    async function RunBattle(item)
+    {
+        SetStatus("Sending to battle: "+item.name);
+        await RunSmart("RunBattle",item);
+        //if(item.log)            RunLog(item);
+    }
+
+
+    function MapFromArr(Arr)
+    {
+        var Map={};
+        for(var i=0;Arr && i<Arr.length;i++)
+        {
+            var Item=Arr[i];
+            Map[Item.ID]=Item;
+        }
+        return Map;
+    }
+
+</script>
+
+
+
+<!--<button onclick="GetTeraArrtNFT()">test</button>-->
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Versus</title>
+    <link href="https://terawallet.org/files/dapp/versus/index.css" rel="stylesheet">
+</head>
+
+<body>
+    <section class="layout">
+        <header class="header">
+            <button id="show-my-nfts-btn" class="button primary">
+                Мой NFT
+            </button>
+
+            <div id="logo" class="logo">
+                <img src="logo.png" alt="logo image" />
+            </div>
+
+            <button id="signIn" class="button primary" onclick="ConnectGame()">
+                Войти
+            </button>
+        </header>
+
+        <main class="main">
+
+        <!-- MAIN PAGE -->
+        <section id="main-page" class="main-page" >
+            <div>
+                <h1 class="title">Мои NFT</h1>
+                <div id="my-nft-list" class="my-nft-list">
+                </div>
+            </div>
+            <div>
+                <h1 class="title">Рейтинг</h1>
+                <div id="rating-list" class="rating-list">
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- NFT PAGE -->
+        <section id="game-page" class="nft" style="display: none">
+            <div class="nft-title">
+                <h1><span id="nftName">Terminator</span></h1>
+                <!-- <button id="changeNft" class="button secondary">Выбрать другой</button> -->
+            </div>
+
+            <div class="nft-info">
+                <img id="myNftAvatar" src="nft-avatar.png" alt="nft image" />
+                <h3>Уровень: <span id="lvl">1</span></h3>
+
+                <div class="nft-stats">
+                    <h4>
+                        <img src="stats.svg">
+                        Характеристики NFT
+                    </h4>
+                    <ul>
+                        <li>Рейтинг: <span id="rating">5</span></li>
+                        <li>Побед: <span id="victories">10</span></li>
+                        <li>Поражений: <span id="defeats">4</span></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Известность: <span id="exp">900/3000</span>
+                            <progress class="progress" id="exp-progress" max="3000" value="900"></progress>
+                        </li>
+                        <li>
+                            Самоуверенность: <span id="confidence">160/200</span>
+                            <progress class="progress" id="confidence-progress" max="200" value="160"></progress>
+                        </li>
+                    </ul>
+                    <h4>
+                        <img src="attack.svg">
+                        Атака
+                    </h4>
+                    <ul>
+                        <li>Критика: <span id="critic">4</span></li>
+                        <li>Оскорбление: <span id="insult">6</span></li>
+                        <li>Насмешка: <span id="mockery">2</span></li>
+                        <li>Провокация: <span id="taunt">4</span></li>
+                    </ul>
+                    <h4>
+                        <img src="defense.svg">
+                        Защита
+                    </h4>
+                    <ul>
+                        <li>Находчивость: <span id="wit">7</span></li>
+                        <li>Самоирония: <span id="selfIrony">2</span></li>
+                        <li>Стрессоустойчивость: <span id="stressResistance">2</span></li>
+                    </ul>
+                    <h4 id="availableSkillPoints">Нет нераспределенных очков навыков</h4>
+                </div>
+            </div>
+            <div class="nft-actions">
+                <div class="nft-controls">
+                    <div class="nft-controls__challenge-selection">
+                        <div class="radio-button">
+                            <input id="fight-option" type="radio" name="radio" value="fight" checked>
+                            <label for="fight-option">Дуэль</label>
+                        </div>
+                        <div class="radio-button">
+                            <input id="train-option" type="radio" name="radio" value="train">
+                            <label for="train-option">Тренировка</label>
+                        </div>
+                    </div>
+
+                    <div class="nft-controls__attacks-selection">
+                        <h2>Выберите атаки</h2>
+                        <div class="attacks">
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.svg" /></button>
+                            <button><img src="button.png" /></button>
+                        </div>
+                        <h5 class="nft-controls__attacks-hint">Атакующие раунды чередуются в выбранной последовательности</h5>
+    
+                        <button id="send-to-fight-btn" class="button sent-to-fight">
+                            Отправить на дуэль
+                        </button>
+                        <div class="trapeze"></div>
+                    </div>
+
+                    <div class="nft-logs">
+                        <h3>События</h3>
+                        <ul id="logs-messages" class="messages">
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        </main>
+
+        <footer class="footer">
+            <button id="showRules" class="button primary">
+                Правила игры
+            </button>
+            <button id="close" class="button primary">
+                Закрыть
+            </button>
+        </footer>
+    </section>
+</body>
+
+
+
+
+<script>
+let isMainPageVisible = true;
+let isGamePageVisible = false;
+
+document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+
+let mainPage, gamePage;
+let showMyNftsBtn, sendToFightBtn, trainOptionInput, fightOptionInput;
+let loggerElement;
+
+let isTrainSelected;
+
+
+let nftName, lvl, rating, victories, defeats, confidence, exp;
+let critic, insult, mockery, taunt;
+let stressRessistance, selfIrony, wit;
+let expProgress, confidenceProgress, availableSkillPoints;
+
+
+
+function addDataToMainPage() {
+    myNftList = document.getElementById('my-nft-list');
+    ratingList = document.getElementById('rating-list');
+
+    glNFTArr.forEach(item => {
+        if(item.IsEth)
+        {
+            const nftDiv = document.createElement('div');
+
+            const nftImg = document.createElement('img');
+            const nftH2 = document.createElement('h2');
+            const nftImportBlockH4 = document.createElement('h4');
+
+            nftImg.src = item.url;
+            nftH2.innerHTML = item.name
+            nftImportBlockH4.innerHTML = 'Импортировать';
+            
+            nftImportBlockH4.addEventListener('click', () => MintNFT(item));
+
+            nftDiv.classList.add('my-nft');
+            nftH2.classList.add('my-nft-name');
+            nftImportBlockH4.classList.add('rating-nft-rarible-link')
+            nftDiv.appendChild(nftImg);
+            nftDiv.appendChild(nftH2);
+            nftDiv.appendChild(nftImportBlockH4);
+
+            myNftList.appendChild(nftDiv);
+        }
+        else
+        {
+            const myNftDiv = document.createElement('div');
+            const myNftImg = document.createElement('img');
+            const myNftH2 = document.createElement('h2');
+            const myNfthStatsDiv = document.createElement('div');
+            const myNftLevelH4 = document.createElement('h4');
+            const myNftVictoriesH4 = document.createElement('h4');
+
+            // new
+            const myNftRaribleBlockH4 = document.createElement('h4');
+            const myNftRaribleA = document.createElement('a');
+
+            myNftRaribleBlockH4.classList.add('rating-nft-rarible-link');
+
+            myNftRaribleA.href = '#'
+            myNftRaribleA.innerHTML = 'Посмотреть на Rarible';
+            myNftRaribleBlockH4.appendChild(myNftRaribleA);
+            ///
+
+            myNftLevelH4.innerHTML = `Уровень: ${item.level}`;
+            myNftVictoriesH4.innerHTML = `Побед: ${item.wins}`;
+
+            myNfthStatsDiv.appendChild(myNftLevelH4);
+            myNfthStatsDiv.appendChild(myNftVictoriesH4);
+            myNfthStatsDiv.classList.add('my-nft-stats');
+
+            myNftDiv.classList.add('my-nft');
+
+            myNftImg.src = item.url;
+            myNftH2.innerHTML = item.name;
+            myNftH2.classList.add('my-nft-name');
+
+
+            myNftDiv.appendChild(myNftImg);
+            myNftDiv.appendChild(myNftH2);
+            myNftDiv.appendChild(myNfthStatsDiv);
+            myNftDiv.appendChild(myNftRaribleBlockH4); //
+
+            myNftList.appendChild(myNftDiv);
+
+            myNftImg.addEventListener('click', () => selectNftForGame(item))
+            myNftH2.addEventListener('click', () => selectNftForGame(item))
+        }
+    });
+
+    glNFTRankings.forEach((item, index) => {
+        const nftDiv = document.createElement('div');
+
+        const nftRatingH1 = document.createElement('h1');
+        const nftImg = document.createElement('img');
+        const nftH2 = document.createElement('h2');
+        const nftStatsDiv = document.createElement('div');
+        const nftLevelH4 = document.createElement('h4');
+        const nftVictoriesH4 = document.createElement('h4');
+        const nftRaribleBlockH4 = document.createElement('h4');
+        const nftRaribleA = document.createElement('a');
+
+        nftRatingH1.innerHTML = `${index+1} место`;
+        nftRatingH1.classList.add('rating-nft-rate');
+
+        nftLevelH4.innerHTML = `Уровень: ${item.level}`;
+        nftVictoriesH4.innerHTML = `Побед: ${item.wins}`;
+
+        nftStatsDiv.appendChild(nftLevelH4);
+        nftStatsDiv.appendChild(nftVictoriesH4);
+        nftStatsDiv.classList.add('rating-nft-stats');
+
+        nftDiv.classList.add('rating-nft');
+
+        nftImg.src = item.url;
+        nftH2.innerHTML = item.name;
+        nftH2.classList.add('rating-nft-name');
+        
+        nftRaribleBlockH4.classList.add('rating-nft-rarible-link');
+
+        nftRaribleA.href = '#'
+        nftRaribleA.innerHTML = 'Посмотреть на Rarible';
+        nftRaribleBlockH4.appendChild(nftRaribleA);
+
+        nftDiv.appendChild(nftRatingH1);
+        nftDiv.appendChild(nftImg);
+        nftDiv.appendChild(nftH2);
+        nftDiv.appendChild(nftStatsDiv);
+        nftDiv.appendChild(nftRaribleBlockH4);
+
+        ratingList.appendChild(nftDiv); 
+    });
+    
+    
+}
+
+
+function addNftStats(NFT) 
+{
+    if(!NFT)
+        return;
+        
+    var levels=GetLevels();
+    myNftAvatar.src=NFT.url;
+    
+    nftName = document.getElementById('nftName');
+    nftName.innerText=NFT.name;
+    
+    lvl = document.getElementById('lvl');
+    rating = document.getElementById('rating');
+    victories = document.getElementById('victories');
+    defeats = document.getElementById('defeats');
+
+    lvl.innerHTML = NFT.level;
+    rating.innerHTML = NFT.rating;
+    victories.innerHTML = NFT.wins;
+    defeats.innerHTML = NFT.defeats;
+
+    exp = document.getElementById('exp');
+    exp.innerHTML = `${NFT.exp}/${levels[NFT.level + 1]}`;
+    expProgress = document.getElementById('exp-progress');
+    expProgress.value = NFT.exp;
+    expProgress.max = levels[NFT.level + 1];
+
+    confidence = document.getElementById('confidence');
+    confidenceProgress = document.getElementById('confidence-progress');
+    confidenceProgress.value = NFT.confidence;
+    
+    //todo
+    confidence.innerHTML = `${NFT.confidence}/${10}`;
+    confidenceProgress.max = 10;
+
+    critic = document.getElementById('critic');
+    insult = document.getElementById('insult');
+    mockery = document.getElementById('mockery');
+    taunt = document.getElementById('taunt');
+    critic.innerHTML = NFT.critic;
+    insult.innerHTML = NFT.insult;
+    mockery.innerHTML = NFT.mockery;
+    taunt.innerHTML = NFT.taunt;
+
+    stressRessistance = document.getElementById('stressResistance');
+    selfIrony = document.getElementById('selfIrony');
+    wit = document.getElementById('wit');
+    stressRessistance.innerHTML = NFT.stressRessistance;
+    selfIrony.innerHTML = NFT.selfIrony;
+    wit.innerHTML = NFT.wit;
+
+    availableSkillPoints = document.getElementById('availableSkillPoints');
+
+    
+    availableSkillPoints.innerHTML = NFT.unallocatedPoins?`Нераспределенные 
+    очки навыков: ${NFT.unallocatedPoins}`:"Нет свободных очков навыков";
+    
+}
+
+
+function selectNftForGame(item) {
+    //currentNFT=item;
+    
+    loggerElement.innerHTML = '';
+
+    mainPage.style = "display: none"
+    gamePage.style = ""
+    
+    addNftStats(item);
+    
+    sendToFightBtn = document.getElementById('send-to-fight-btn');
+    sendToFightBtn.addEventListener('click', () => {
+        loggerElement.innerHTML = '';
+        item.log="";
+
+        RunBattle(item);
+    });
+}
+
+
+function onDOMContentLoaded() {
+    mainPage = document.getElementById('main-page');
+    gamePage = document.getElementById('game-page');
+
+    addDataToMainPage();
+
+    loggerElement = document.getElementById('logs-messages');
+
+    logo = document.getElementById('logo');
+    showMyNftsBtn = document.getElementById('show-my-nfts-btn');
+
+    trainOptionInput = document.getElementById('train-option');
+    fightOptionInput = document.getElementById('fight-option');
+
+    logo.addEventListener('click', () => {
+        gamePage.style = "display: none"
+        mainPage.style = ""
+    });
+
+    trainOptionInput.addEventListener('change', (e) => {
+        isTrainSelected = true
+    })
+
+
+}
+
+function RunLog(NFT)
+{
+    let i = 0;
+
+    loggerElement.innerHTML = '';
+
+    NFT.log.forEach(message => {
+        setTimeout(function() {
+            const li = document.createElement('li');
+
+            if (message.includes('(!) - ')) {
+                li.innerHTML = message.replace('(!) - ', '');
+                li.classList.add("message");
+                li.classList.add("system-message");
+                loggerElement.appendChild(li);
+                loggerElement.scrollTop = loggerElement.scrollHeight;
+                return;
+            }
+
+            const img = document.createElement('img');
+            const divContent = document.createElement('div');
+
+            li.classList.add("message");
+            divContent.classList.add("message-content");
+
+            if (message.includes('(1) - ')) {
+                const formattedMsg = message.replace('(1) - ', '');
+                img.src = NFT.url;
+
+                li.classList.add("my-message");
+                divContent.innerHTML = formattedMsg;
+            } else {
+                const formattedMsg = message.replace('(2) - ', '');
+                img.src = 'https://terawallet.org/files/dapp/versus/enemy.png';
+
+                divContent.innerHTML = formattedMsg;
+            }
+
+            li.appendChild(img);
+            li.appendChild(divContent);
+
+            loggerElement.appendChild(li);
+            loggerElement.scrollTop = loggerElement.scrollHeight;
+        }, i * 500, i);
+        i++;
+    })
+    
+}
+
+////-------------------------------------------------------------- common lib
+
+function GetLevels()
+{
+    var levels = {
+        1: 0,
+        2: 100,
+        3: 250,
+        4: 500,
+        5: 1000,
+        6: 1600,
+        7: 2500,
+        8: 5000,
+        9: 10000,
+        10: 16000,
+        11: 25000,
+        12: 50000
+    }
+    return levels;
+}
+
+
+function ReloadImg()
+{
+    var arr = document.querySelectorAll("img");
+    arr.forEach(function(item)
+    {
+        if(item.src.indexOf("files")===-1)
+        {
+            var StrArr=item.src.split("/");
+            var name=StrArr[StrArr.length-1];
+            item.src="https://terawallet.org/files/dapp/versus/"+name;
+        }
+    });
+    
+}
+
+ReloadImg();
+    
+</script>
+<style>
+    #myNftAvatar
+    {
+        max-height:320px;
+    }
+    .nft-info, .nft-actions
+    {
+        max-width:90vw;
+    }
+</style>
