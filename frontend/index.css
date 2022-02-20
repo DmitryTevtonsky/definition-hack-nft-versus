@@ -157,6 +157,13 @@ ul {
     height: 100%;
 }
 
+/* NEW */
+.nft-imported-selection {
+    display: flex;
+    width: 25rem;
+    margin-bottom: 1rem;
+}
+
 .title {
     margin-bottom: 2rem;
     font-size: 2rem;
@@ -429,7 +436,27 @@ ul {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), radial-gradient(42.6% 142.71% at 71.76% -27.08%, #FF0D84 0%, #3E0939 100%);
     font-weight: bold;
     color: white;
+}
 
+/* new */
+.nft-imported-selection .radio-button:first-child label {
+    border-radius: 6px 0 0 6px;
+}
+
+.nft-imported-selection .radio-button:last-child label {
+    border-radius: 0 6px 6px 0;
+}
+
+.nft-imported-selection .radio-button:first-child input[type=radio]:checked+label {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), radial-gradient(31.01% 98.96% at 26.97% -9.37%, #FF0D84 0%, #3E0939 100%);
+    font-weight: bold;
+    color: white;
+}
+
+.nft-imported-selection .radio-button:last-child input[type=radio]:checked+label {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), radial-gradient(42.6% 142.71% at 71.76% -27.08%, #FF0D84 0%, #3E0939 100%);
+    font-weight: bold;
+    color: white;
 }
 
 .nft-controls__attacks-selection {

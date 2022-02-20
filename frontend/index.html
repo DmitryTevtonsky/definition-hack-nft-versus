@@ -33,7 +33,20 @@
         <section id="main-page" class="main-page" >
             <div>
                 <h1 class="title">Мои NFT</h1>
+                <div class="nft-imported-selection">
+                    <div class="radio-button">
+                        <input id="imported-option" type="radio" name="radio" value="imported" checked>
+                        <label for="imported-option">Импортированные</label>
+                    </div>
+
+                    <div class="radio-button">
+                        <input id="not-imported-option" type="radio" name="radio" value="not-imported">
+                        <label for="not-imported-option">Неимпортированные</label>
+                    </div>
+                </div>
                 <div id="my-nft-list" class="my-nft-list">
+                </div>
+                <div id="not-imported-nft-list" class="my-nft-list" style="display: none;">
                 </div>
             </div>
             <div>

@@ -118,6 +118,14 @@ var nftRankings = [
     },
 ];
 
+var notImportedNfts = [
+    {
+        id: 226,
+        image_src: 'https://lh3.googleusercontent.com/vtvjr0J2_psGUa-VS7nPvR_Vm8RUjois54wM5Wn_uSBS0L2vFeesBwuPOrCMsoPmShsuwOn8uf9bOngR6wfkRw4uxy-Fs2KzY51bwg=w600',
+        name: 'HAPE #3955',
+    }
+]
+
 player1 = {
     name: "Игрок 1",
     lv: 4,

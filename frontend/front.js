@@ -2,6 +2,8 @@
 let isMainPageVisible = true;
 let isGamePageVisible = false;
 
+let isImportedNftsSelected = true;
+
 document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
 
 let mainPage, gamePage;
@@ -10,9 +12,33 @@ let loggerElement;
 
 let isTrainSelected;
 
+let importedOption, notImportedOption;
+let importedSection, notImportedSection;
+
 function onDOMContentLoaded() {
     mainPage = document.getElementById('main-page');
     gamePage = document.getElementById('game-page');
+
+    importedOption = document.getElementById('imported-option');
+    importedSection = document.getElementById('my-nft-list');
+    notImportedOption = document.getElementById('not-imported-option')
+    notImportedSection = document.getElementById('not-imported-nft-list');
+
+    importedOption.click();
+
+    importedOption.onchange = () => {
+        isImportedNftsSelected = true;
+        console.log(isImportedNftsSelected);
+        importedSection.style = "";
+        notImportedSection.style = "display: none"
+    }
+
+    notImportedOption.onchange = () => {
+        isImportedNftsSelected = false;
+        console.log(isImportedNftsSelected);
+        importedSection.style = "display: none"
+        notImportedSection.style = ""
+    }
 
     addDataToMainPage();
 
@@ -143,6 +169,7 @@ function addNftStats() {
 function addDataToMainPage() {
     myNftList = document.getElementById('my-nft-list');
     ratingList = document.getElementById('rating-list');
+    notImportedNftList = document.getElementById('not-imported-nft-list');
 
     nftList.forEach(item => {
         const myNftDiv = document.createElement('div');
@@ -230,6 +257,27 @@ function addDataToMainPage() {
 
         ratingList.appendChild(nftDiv); 
     });
+
+    notImportedNfts.forEach(item => {
+        const nftDiv = document.createElement('div');
+
+        const nftImg = document.createElement('img');
+        const nftH2 = document.createElement('h2');
+        const nftImportBlockH4 = document.createElement('h4');
+
+        nftImg.src = item.image_src;
+        nftH2.innerHTML = item.name
+        nftImportBlockH4.innerHTML = 'Импортировать';
+
+        nftDiv.classList.add('my-nft');
+        nftH2.classList.add('my-nft-name');
+        nftImportBlockH4.classList.add('rating-nft-rarible-link')
+        nftDiv.appendChild(nftImg);
+        nftDiv.appendChild(nftH2);
+        nftDiv.appendChild(nftImportBlockH4);
+
+        notImportedNftList.appendChild(nftDiv);
+    })
 }
 
 
