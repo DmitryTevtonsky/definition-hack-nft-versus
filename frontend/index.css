@@ -272,8 +272,8 @@ ul {
     grid-template-rows: auto;
     grid-template-columns: 1fr;
     grid-gap: 1rem;
-    height: 100%;
-    overflow: hidden;
+    height: auto; 
+    /* overflow: hidden; */
 }
 
 .nft-title {

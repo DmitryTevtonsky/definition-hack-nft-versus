@@ -18,13 +18,14 @@ function onDOMContentLoaded() {
 
     loggerElement = document.getElementById('logs-messages');
 
+    logo = document.getElementById('logo');
     showMyNftsBtn = document.getElementById('show-my-nfts-btn');
     sendToFightBtn = document.getElementById('send-to-fight-btn');
 
     trainOptionInput = document.getElementById('train-option');
     fightOptionInput = document.getElementById('fight-option');
 
-    showMyNftsBtn.addEventListener('click', () => {
+    logo.addEventListener('click', () => {
         gamePage.style = "display: none"
         mainPage.style = ""
     });
@@ -39,40 +40,47 @@ function onDOMContentLoaded() {
         const log = doBattle();
         console.log(log, loggerElement);
 
+        let i = 0;
+
         log.forEach(message => {
-            const li = document.createElement('li');
+            setTimeout(function() {
+                const li = document.createElement('li');
 
-            if (message.includes('(!) - ')) {
-                li.innerHTML = message.replace('(!) - ', '');
+                if (message.includes('(!) - ')) {
+                    li.innerHTML = message.replace('(!) - ', '');
+                    li.classList.add("message");
+                    li.classList.add("system-message");
+                    loggerElement.appendChild(li);
+                    loggerElement.scrollTop = loggerElement.scrollHeight;
+                    return;
+                }
+
+                const img = document.createElement('img');
+                const divContent = document.createElement('div');
+
                 li.classList.add("message");
-                li.classList.add("system-message");
+                divContent.classList.add("message-content");
+
+                if (message.includes('(1) - ')) {
+                    const formattedMsg = message.replace('(1) - ', '');
+                    img.src = 'nft-avatar.png';
+
+                    li.classList.add("my-message");
+                    divContent.innerHTML = formattedMsg;
+                } else {
+                    const formattedMsg = message.replace('(2) - ', '');
+                    img.src = 'enemy.png';
+
+                    divContent.innerHTML = formattedMsg;
+                }
+
+                li.appendChild(img);
+                li.appendChild(divContent);
+
                 loggerElement.appendChild(li);
-                return;
-            }
-
-            const img = document.createElement('img');
-            const divContent = document.createElement('div');
-
-            li.classList.add("message");
-            divContent.classList.add("message-content");
-
-            if (message.includes('(1) - ')) {
-                const formattedMsg = message.replace('(1) - ', '');
-                img.src = 'nft-avatar.png';
-
-                li.classList.add("my-message");
-                divContent.innerHTML = formattedMsg;
-            } else {
-                const formattedMsg = message.replace('(2) - ', '');
-                img.src = 'enemy.png';
-
-                divContent.innerHTML = formattedMsg;
-            }
-
-            li.appendChild(img);
-            li.appendChild(divContent);
-
-            loggerElement.appendChild(li);
+                loggerElement.scrollTop = loggerElement.scrollHeight;
+            }, i * 500, i);
+            i++;
         })
     });
 
@@ -143,6 +151,18 @@ function addDataToMainPage() {
         const myNfthStatsDiv = document.createElement('div');
         const myNftLevelH4 = document.createElement('h4');
         const myNftVictoriesH4 = document.createElement('h4');
+
+        // new
+        const myNftRaribleBlockH4 = document.createElement('h4');
+        const myNftRaribleA = document.createElement('a');
+
+        myNftRaribleBlockH4.classList.add('rating-nft-rarible-link');
+
+        myNftRaribleA.href = '#'
+        myNftRaribleA.innerHTML = 'Посмотреть на Rarible';
+        myNftRaribleBlockH4.appendChild(myNftRaribleA);
+        ///
+
         myNftLevelH4.innerHTML = `Уровень: ${item.level}`;
         myNftVictoriesH4.innerHTML = `Побед: ${item.wins}`;
 
@@ -160,10 +180,12 @@ function addDataToMainPage() {
         myNftDiv.appendChild(myNftImg);
         myNftDiv.appendChild(myNftH2);
         myNftDiv.appendChild(myNfthStatsDiv);
+        myNftDiv.appendChild(myNftRaribleBlockH4); //
 
         myNftList.appendChild(myNftDiv); 
 
-        myNftDiv.addEventListener('click', () => selectNftForGame(item.id))
+        myNftImg.addEventListener('click', () => selectNftForGame(item.id))
+        myNftH2.addEventListener('click', () => selectNftForGame(item.id))
     });
 
     nftRankings.forEach((item, index) => {
