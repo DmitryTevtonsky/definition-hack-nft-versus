@@ -160,7 +160,7 @@ ul {
 /* NEW */
 .nft-imported-selection {
     display: flex;
-    width: 25rem;
+    width: auto;
     margin-bottom: 1rem;
 }
 
@@ -186,7 +186,7 @@ ul {
 }
 
 .my-nft img {
-    width: auto;
+    width: 20rem;
     max-width: 20rem;
 }
 
@@ -271,15 +271,16 @@ ul {
 
 /* FOR NFT PAGE */
 .nft {
-    display: grid;
-    grid-template-areas:
+    display: flex;
+    flex-direction: column;
+    /* grid-template-areas:
         "nft-title"
         "nft-info"
         "nft-actions";
     grid-template-rows: auto;
     grid-template-columns: 1fr;
-    grid-gap: 1rem;
-    height: auto; 
+    grid-gap: 1rem; */
+    height: 100%; 
     /* overflow: hidden; */
 }
 
@@ -295,12 +296,21 @@ ul {
     font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+.nft-content {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
 .nft-info {
     grid-area: nft-info;
     display: flex;
     flex-direction: column;
     border: var(--border-primary);
     font-size: 14px;
+    /* margin-right: 1rem; */
 }
 
 .nft-info h3 {
@@ -314,6 +324,7 @@ ul {
 
 .nft-stats {
     padding: 0 1rem;
+    overflow: auto;
 }
 
 .nft-stats h4 {
@@ -368,6 +379,7 @@ ul {
 
 .nft-actions {
     grid-area: nft-actions;
+    width: 100%;
 }
 
 .nft-controls {
@@ -406,7 +418,7 @@ ul {
 
 .radio-button label {
     display: inline-block;
-    padding: 0px 15px;
+    padding: 0px 5px;
     line-height: 34px;
     width: 100%;
     border-right: none;
@@ -522,10 +534,11 @@ ul {
     border: var(--border-primary);
     width: 100%;
     height: 100%;
-    min-height: 20rem;
     padding: 0;
+    /* min-height: 20rem; */
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .nft-logs h3 {
@@ -536,6 +549,7 @@ ul {
     height: 100%;
     overflow: auto;
     padding: 0 1rem;
+    min-height: 5rem;
 }
 
 .messages li {
@@ -595,13 +609,12 @@ ul {
         padding: 0.75rem 1.5rem;
     }
 
-    .nft {
-        grid-template-areas:
-            "nft-title nft-title"
-            "nft-info nft-actions"
-            "nft-info nft-actions";
-        grid-template-rows: 40px 1fr 2fr;
-        grid-template-columns: 16rem minmax(10rem, 1fr);
+    .nft-info {
+        margin-right: 1rem;
+    }
+
+    .nft-content {
+        flex-direction: row;
     }
 
     .nft-avatar {

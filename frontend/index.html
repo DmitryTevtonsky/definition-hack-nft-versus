@@ -64,111 +64,113 @@
                 <h1><span id="nftName">Terminator</span></h1>
                 <!-- <button id="changeNft" class="button secondary">Выбрать другой</button> -->
             </div>
+            <div class="nft-content">
 
-            <div class="nft-info">
-                <img id="myNftAvatar" src="nft-avatar.png" alt="nft image" />
-                <h3>Уровень: <span id="lvl">1</span></h3>
+                <div class="nft-info">
+                    <img id="myNftAvatar" src="nft-avatar.png" alt="nft image" />
+                    <h3>Уровень: <span id="lvl">1</span></h3>
 
-                <div class="nft-stats">
-                    <h4>
-                        <img src="stats.svg">
-                        Характеристики NFT
-                    </h4>
-                    <ul>
-                        <li>Рейтинг: <span id="rating">5</span></li>
-                        <li>Побед: <span id="victories">10</span></li>
-                        <li>Поражений: <span id="defeats">4</span></li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Известность: <span id="exp">900/3000</span>
-                            <progress class="progress" id="exp-progress" max="3000" value="900"></progress>
-                        </li>
-                        <li>
-                            Самоуверенность: <span id="confidence">160/200</span>
-                            <progress class="progress" id="confidence-progress" max="200" value="160"></progress>
-                        </li>
-                    </ul>
-                    <h4>
-                        <img src="attack.svg">
-                        Атака
-                    </h4>
-                    <ul>
-                        <li>Критика: <span id="critic">4</span></li>
-                        <li>Оскорбление: <span id="insult">6</span></li>
-                        <li>Насмешка: <span id="mockery">2</span></li>
-                        <li>Провокация: <span id="taunt">4</span></li>
-                    </ul>
-                    <h4>
-                        <img src="defense.svg">
-                        Защита
-                    </h4>
-                    <ul>
-                        <li>Находчивость: <span id="wit">7</span></li>
-                        <li>Самоирония: <span id="selfIrony">2</span></li>
-                        <li>Стрессоустойчивость: <span id="stressResistance">2</span></li>
-                    </ul>
-                    <h4 id="availableSkillPoints">Нет нераспределенных очков навыков</h4>
-                </div>
-            </div>
-            <div class="nft-actions">
-                <div class="nft-controls">
-                    <div class="nft-controls__challenge-selection">
-                        <div class="radio-button">
-                            <input id="train-option" type="radio" name="radio" value="train" checked>
-                            <label for="train-option">Тренировка</label>
-                        </div>
-
-                        <div class="radio-button">
-                            <input id="fight-option" type="radio" name="radio" value="fight">
-                            <label for="fight-option">Дуэль</label>
-                        </div>
-                    </div>
-
-                    <!-- new -->
-                    <div class="nft-controls__train-selection">
-                        <h2>Выберите направления</h2>
-                        <div class="train">
-                            <button><img src="social.svg" /></button>
-                            <button><img src="market.svg" /></button>
-                            <button><img src="gaming.svg" /></button>
-                            <button><img src="news.svg" /></button>
-                            <button><img src="politics.svg" /></button>
-                        </div>
-                        <h5 class="nft-controls__train-hint">Направления тренировки чередуются в выбранной последовательности</h5>
-    
-                        <button id="send-to-train-btn" class="button sent-to-train">
-                            Отправить на тренировку
-                        </button>
-                        <div class="trapeze"></div>
-                    </div>
-                    <!--  -->
-
-
-                    <div class="nft-controls__attacks-selection hidden">
-                        <h2>Выберите атаки</h2>
-                        <div class="attacks">
-                            <button><img src="critic.svg" /></button>
-                            <button><img src="insult.svg" /></button>
-                            <button><img src="critic.svg" /></button>
-                            <button><img src="mockery.svg" /></button>
-                            <button><img src="taunt.svg" /></button>
-                        </div>
-                        <h5 class="nft-controls__attacks-hint">Атакующие раунды чередуются в выбранной последовательности</h5>
-    
-                        <button id="send-to-fight-btn" class="button sent-to-fight">
-                            Отправить на дуэль
-                        </button>
-                        <div class="trapeze"></div>
-                    </div>
-
-                    <div class="nft-logs">
-                        <h3>События</h3>
-                        <ul id="logs-messages" class="messages">
+                    <div class="nft-stats">
+                        <h4>
+                            <img src="stats.svg">
+                            Характеристики NFT
+                        </h4>
+                        <ul>
+                            <li>Рейтинг: <span id="rating">5</span></li>
+                            <li>Побед: <span id="victories">10</span></li>
+                            <li>Поражений: <span id="defeats">4</span></li>
                         </ul>
+                        <ul>
+                            <li>
+                                Известность: <span id="exp">900/3000</span>
+                                <progress class="progress" id="exp-progress" max="3000" value="900"></progress>
+                            </li>
+                            <li>
+                                Самоуверенность: <span id="confidence">160/200</span>
+                                <progress class="progress" id="confidence-progress" max="200" value="160"></progress>
+                            </li>
+                        </ul>
+                        <h4>
+                            <img src="attack.svg">
+                            Атака
+                        </h4>
+                        <ul>
+                            <li>Критика: <span id="critic">4</span></li>
+                            <li>Оскорбление: <span id="insult">6</span></li>
+                            <li>Насмешка: <span id="mockery">2</span></li>
+                            <li>Провокация: <span id="taunt">4</span></li>
+                        </ul>
+                        <h4>
+                            <img src="defense.svg">
+                            Защита
+                        </h4>
+                        <ul>
+                            <li>Находчивость: <span id="wit">7</span></li>
+                            <li>Самоирония: <span id="selfIrony">2</span></li>
+                            <li>Стрессоустойчивость: <span id="stressResistance">2</span></li>
+                        </ul>
+                        <h4 id="availableSkillPoints">Нет нераспределенных очков навыков</h4>
                     </div>
                 </div>
+                <div class="nft-actions">
+                    <div class="nft-controls">
+                        <div class="nft-controls__challenge-selection">
+                            <div class="radio-button">
+                                <input id="train-option" type="radio" name="radio" value="train" checked>
+                                <label for="train-option">Тренировка</label>
+                            </div>
 
+                            <div class="radio-button">
+                                <input id="fight-option" type="radio" name="radio" value="fight">
+                                <label for="fight-option">Дуэль</label>
+                            </div>
+                        </div>
+
+                        <!-- new -->
+                        <div class="nft-controls__train-selection">
+                            <h2>Выберите направления</h2>
+                            <div class="train">
+                                <button><img src="social.svg" /></button>
+                                <button><img src="market.svg" /></button>
+                                <button><img src="gaming.svg" /></button>
+                                <button><img src="news.svg" /></button>
+                                <button><img src="politics.svg" /></button>
+                            </div>
+                            <h5 class="nft-controls__train-hint">Направления тренировки чередуются в выбранной последовательности</h5>
+        
+                            <button id="send-to-train-btn" class="button sent-to-train">
+                                Отправить на тренировку
+                            </button>
+                            <div class="trapeze"></div>
+                        </div>
+                        <!--  -->
+
+
+                        <div class="nft-controls__attacks-selection hidden">
+                            <h2>Выберите атаки</h2>
+                            <div class="attacks">
+                                <button><img src="critic.svg" /></button>
+                                <button><img src="insult.svg" /></button>
+                                <button><img src="critic.svg" /></button>
+                                <button><img src="mockery.svg" /></button>
+                                <button><img src="taunt.svg" /></button>
+                            </div>
+                            <h5 class="nft-controls__attacks-hint">Атакующие раунды чередуются в выбранной последовательности</h5>
+        
+                            <button id="send-to-fight-btn" class="button sent-to-fight">
+                                Отправить на дуэль
+                            </button>
+                            <div class="trapeze"></div>
+                        </div>
+
+                        <div class="nft-logs">
+                            <h3>События</h3>
+                            <ul id="logs-messages" class="messages">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </section>
         </main>

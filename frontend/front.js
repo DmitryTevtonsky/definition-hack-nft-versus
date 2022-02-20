@@ -132,7 +132,7 @@ function onDOMContentLoaded() {
 
                 loggerElement.appendChild(li);
                 loggerElement.scrollTop = loggerElement.scrollHeight;
-            }, i * 500, i);
+            }, i * 1000, i);
             i++;
         })
 
@@ -142,7 +142,7 @@ function onDOMContentLoaded() {
             sendToFightBtn.classList.remove('disabled');
             challengeSelection.classList.remove('disabled');
             fightInProgress = false;
-        }, log.length * 500);
+        }, log.length * 1000);
     });
 
     // 
@@ -176,18 +176,10 @@ function onDOMContentLoaded() {
                 li.classList.add("message");
                 divContent.classList.add("message-content");
 
-                if (message.includes('(1) - ')) {
-                    const formattedMsg = message.replace('(1) - ', '');
-                    img.src = 'nft-avatar.png';
+                img.src = 'nft-avatar.png';
 
-                    li.classList.add("my-message");
-                    divContent.innerHTML = formattedMsg;
-                } else {
-                    const formattedMsg = message.replace('(2) - ', '');
-                    img.src = 'enemy.png';
-
-                    divContent.innerHTML = formattedMsg;
-                }
+                li.classList.add("my-message");
+                divContent.innerHTML = message;
 
                 li.appendChild(img);
                 li.appendChild(divContent);
@@ -197,7 +189,7 @@ function onDOMContentLoaded() {
 
 
                 addNftStats();
-            }, i * 500, i);
+            }, i * 10000, i);
             i++;
         })
 
@@ -206,7 +198,7 @@ function onDOMContentLoaded() {
             sendToTrainBtn.classList.remove('disabled');
             challengeSelection.classList.remove('disabled');
             trainInProgress = false;
-        }, log.length * 500);
+        }, log.length * 10000);
     });
 
     addNftStats()

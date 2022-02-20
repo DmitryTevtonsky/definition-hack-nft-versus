@@ -31,10 +31,10 @@
 var nftList = [
     {
         id: 1,
-        image_src: 'https://lh3.googleusercontent.com/38DTUQF6ILml49Vx4JeQS7LJA5SB7u0psMrWIftYsZ0HJdY_PCmyljnjsFisskbELvgrzbc-AqWttSQqQBPPs1s7h_Y9r0gkm9PyfRA=w600',
-        name: 'Cosmodino #7149',
-        level: 2,
-        wins: 20
+        image_src: 'nft-avatar.png',
+        name: 'Terminator',
+        level: 4,
+        wins: 111
     },
     {
         id: 2,
