@@ -19,11 +19,13 @@ function onDOMContentLoaded() {
     mainPage = document.getElementById('main-page');
     gamePage = document.getElementById('game-page');
 
+    const trainOption = document.getElementById('train-option');
+    trainOption.click();
+
     importedOption = document.getElementById('imported-option');
     importedSection = document.getElementById('my-nft-list');
     notImportedOption = document.getElementById('not-imported-option')
     notImportedSection = document.getElementById('not-imported-nft-list');
-
     importedOption.click();
 
     importedOption.onchange = () => {
@@ -45,31 +47,56 @@ function onDOMContentLoaded() {
     loggerElement = document.getElementById('logs-messages');
 
     logo = document.getElementById('logo');
-    showMyNftsBtn = document.getElementById('show-my-nfts-btn');
-    sendToFightBtn = document.getElementById('send-to-fight-btn');
-
-    trainOptionInput = document.getElementById('train-option');
-    fightOptionInput = document.getElementById('fight-option');
 
     logo.addEventListener('click', () => {
         gamePage.style = "display: none"
         mainPage.style = ""
     });
 
+    showMyNftsBtn = document.getElementById('show-my-nfts-btn');
+
+    sendToFightBtn = document.getElementById('send-to-fight-btn');
+    sendToTrainBtn = document.getElementById('send-to-train-btn');
+
+    challengeSelection = document.getElementsByClassName('nft-controls__challenge-selection')[0];
+
+    trainOptionInput = document.getElementById('train-option');
+    fightOptionInput = document.getElementById('fight-option');
+
+    let fightInProgress = false;
+    let trainInProgress = false;
+
     trainOptionInput.addEventListener('change', (e) => {
-        isTrainSelected = true
+        if (!fightInProgress) {
+            isTrainSelected = true
+            document.getElementsByClassName('nft-controls__attacks-selection')[0].classList.add('hidden');
+            document.getElementsByClassName('nft-controls__train-selection')[0].classList.remove('hidden');
+            loggerElement.innerHTML = '';
+        }
+    })
+    fightOptionInput.addEventListener('change', (e) => {
+        if (!trainInProgress) {
+            isTrainSelected = false
+            document.getElementsByClassName('nft-controls__train-selection')[0].classList.add('hidden');
+            document.getElementsByClassName('nft-controls__attacks-selection')[0].classList.remove('hidden');
+            loggerElement.innerHTML = '';
+        }
     })
 
     sendToFightBtn.addEventListener('click', () => {
+        sendToFightBtn.disabled = true;
+        sendToFightBtn.classList.add('disabled');
+        challengeSelection.classList.add('disabled');
+        fightInProgress = true;
+
         loggerElement.innerHTML = '';
 
         const log = doBattle();
-        console.log(log, loggerElement);
+        console.log(log, loggerElement, typeof (log));
 
         let i = 0;
-
         log.forEach(message => {
-            setTimeout(function() {
+            setTimeout(function () {
                 const li = document.createElement('li');
 
                 if (message.includes('(!) - ')) {
@@ -108,6 +135,78 @@ function onDOMContentLoaded() {
             }, i * 500, i);
             i++;
         })
+
+        setTimeout(function () {
+            addNftStats();
+            sendToFightBtn.disabled = false;
+            sendToFightBtn.classList.remove('disabled');
+            challengeSelection.classList.remove('disabled');
+            fightInProgress = false;
+        }, log.length * 500);
+    });
+
+    // 
+    sendToTrainBtn.addEventListener('click', () => {
+        sendToTrainBtn.disabled = true;
+        sendToTrainBtn.classList.add('disabled');
+        challengeSelection.classList.add('disabled');
+        trainInProgress = true;
+
+        loggerElement.innerHTML = '';
+
+        const log = doTravel();
+        console.log(log, loggerElement, typeof (log));
+
+        let i = 0;
+        log.forEach(message => {
+            setTimeout(function () {
+                const li = document.createElement('li');
+                if (message.includes('(!) - ')) {
+                    li.innerHTML = message.replace('(!) - ', '');
+                    li.classList.add("message");
+                    li.classList.add("system-message");
+                    loggerElement.appendChild(li);
+                    loggerElement.scrollTop = loggerElement.scrollHeight;
+                    return;
+                }
+
+                const img = document.createElement('img');
+                const divContent = document.createElement('div');
+
+                li.classList.add("message");
+                divContent.classList.add("message-content");
+
+                if (message.includes('(1) - ')) {
+                    const formattedMsg = message.replace('(1) - ', '');
+                    img.src = 'nft-avatar.png';
+
+                    li.classList.add("my-message");
+                    divContent.innerHTML = formattedMsg;
+                } else {
+                    const formattedMsg = message.replace('(2) - ', '');
+                    img.src = 'enemy.png';
+
+                    divContent.innerHTML = formattedMsg;
+                }
+
+                li.appendChild(img);
+                li.appendChild(divContent);
+
+                loggerElement.appendChild(li);
+                loggerElement.scrollTop = loggerElement.scrollHeight;
+
+
+                addNftStats();
+            }, i * 500, i);
+            i++;
+        })
+
+        setTimeout(function () {
+            sendToTrainBtn.disabled = false;
+            sendToTrainBtn.classList.remove('disabled');
+            challengeSelection.classList.remove('disabled');
+            trainInProgress = false;
+        }, log.length * 500);
     });
 
     addNftStats()
@@ -202,14 +301,14 @@ function addDataToMainPage() {
         myNftImg.src = item.image_src;
         myNftH2.innerHTML = item.name;
         myNftH2.classList.add('my-nft-name');
-        
+
 
         myNftDiv.appendChild(myNftImg);
         myNftDiv.appendChild(myNftH2);
         myNftDiv.appendChild(myNfthStatsDiv);
         myNftDiv.appendChild(myNftRaribleBlockH4); //
 
-        myNftList.appendChild(myNftDiv); 
+        myNftList.appendChild(myNftDiv);
 
         myNftImg.addEventListener('click', () => selectNftForGame(item.id))
         myNftH2.addEventListener('click', () => selectNftForGame(item.id))
@@ -227,7 +326,7 @@ function addDataToMainPage() {
         const nftRaribleBlockH4 = document.createElement('h4');
         const nftRaribleA = document.createElement('a');
 
-        nftRatingH1.innerHTML = `${index+1} место`;
+        nftRatingH1.innerHTML = `${index + 1} место`;
         nftRatingH1.classList.add('rating-nft-rate');
 
         nftLevelH4.innerHTML = `Уровень: ${item.level}`;
@@ -242,7 +341,7 @@ function addDataToMainPage() {
         nftImg.src = item.image_src;
         nftH2.innerHTML = item.name;
         nftH2.classList.add('rating-nft-name');
-        
+
         nftRaribleBlockH4.classList.add('rating-nft-rarible-link');
 
         nftRaribleA.href = '#'
@@ -255,7 +354,7 @@ function addDataToMainPage() {
         nftDiv.appendChild(nftStatsDiv);
         nftDiv.appendChild(nftRaribleBlockH4);
 
-        ratingList.appendChild(nftDiv); 
+        ratingList.appendChild(nftDiv);
     });
 
     notImportedNfts.forEach(item => {
@@ -287,4 +386,7 @@ function selectNftForGame(nftId = '0') {
 
     mainPage.style = "display: none"
     gamePage.style = ""
+
+    const trainOption = document.getElementById('train-option');
+    trainOption.click();
 }

@@ -427,6 +427,8 @@ function doTravel() {
     }
     console.log(travelLog);
     // console.log(player1);
+
+    return travelLog;
 }
 
 
