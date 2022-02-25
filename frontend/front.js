@@ -1,4 +1,3 @@
-
 let isMainPageVisible = true;
 let isGamePageVisible = false;
 
@@ -20,7 +19,7 @@ function onDOMContentLoaded() {
     gamePage = document.getElementById('game-page');
 
     const trainOption = document.getElementById('train-option');
-    trainOption.click();
+    // trainOption.click();
 
     importedOption = document.getElementById('imported-option');
     importedSection = document.getElementById('my-nft-list');
@@ -66,7 +65,7 @@ function onDOMContentLoaded() {
     let fightInProgress = false;
     let trainInProgress = false;
 
-    trainOptionInput.addEventListener('change', (e) => {
+    trainOptionInput && trainOptionInput.addEventListener('change', (e) => {
         if (!fightInProgress) {
             isTrainSelected = true
             document.getElementsByClassName('nft-controls__attacks-selection')[0].classList.add('hidden');
@@ -74,7 +73,7 @@ function onDOMContentLoaded() {
             loggerElement.innerHTML = '';
         }
     })
-    fightOptionInput.addEventListener('change', (e) => {
+    fightOptionInput && fightOptionInput.addEventListener('change', (e) => {
         if (!trainInProgress) {
             isTrainSelected = false
             document.getElementsByClassName('nft-controls__train-selection')[0].classList.add('hidden');
@@ -86,17 +85,17 @@ function onDOMContentLoaded() {
     sendToFightBtn.addEventListener('click', () => {
         sendToFightBtn.disabled = true;
         sendToFightBtn.classList.add('disabled');
-        challengeSelection.classList.add('disabled');
+        challengeSelection && challengeSelection.classList.add('disabled');
         fightInProgress = true;
 
         loggerElement.innerHTML = '';
 
         const log = doBattle();
-        console.log(log, loggerElement, typeof (log));
+        console.log(log, loggerElement, typeof(log));
 
         let i = 0;
         log.forEach(message => {
-            setTimeout(function () {
+            setTimeout(function() {
                 const li = document.createElement('li');
 
                 if (message.includes('(!) - ')) {
@@ -136,17 +135,17 @@ function onDOMContentLoaded() {
             i++;
         })
 
-        setTimeout(function () {
+        setTimeout(function() {
             addNftStats();
             sendToFightBtn.disabled = false;
             sendToFightBtn.classList.remove('disabled');
-            challengeSelection.classList.remove('disabled');
+            challengeSelection && challengeSelection.classList.remove('disabled');
             fightInProgress = false;
         }, log.length * 1000);
     });
 
     // 
-    sendToTrainBtn.addEventListener('click', () => {
+    sendToTrainBtn && sendToTrainBtn.addEventListener('click', () => {
         sendToTrainBtn.disabled = true;
         sendToTrainBtn.classList.add('disabled');
         challengeSelection.classList.add('disabled');
@@ -155,11 +154,11 @@ function onDOMContentLoaded() {
         loggerElement.innerHTML = '';
 
         const log = doTravel();
-        console.log(log, loggerElement, typeof (log));
+        console.log(log, loggerElement, typeof(log));
 
         let i = 0;
         log.forEach(message => {
-            setTimeout(function () {
+            setTimeout(function() {
                 const li = document.createElement('li');
                 if (message.includes('(!) - ')) {
                     li.innerHTML = message.replace('(!) - ', '');
@@ -193,7 +192,7 @@ function onDOMContentLoaded() {
             i++;
         })
 
-        setTimeout(function () {
+        setTimeout(function() {
             sendToTrainBtn.disabled = false;
             sendToTrainBtn.classList.remove('disabled');
             challengeSelection.classList.remove('disabled');
@@ -201,13 +200,18 @@ function onDOMContentLoaded() {
         }, log.length * 10000);
     });
 
-    addNftStats()
+    addNftStats();
+
+    initModals();
+
+    refreshAttacks();
 }
 
 let nftName, lvl, rating, victories, defeats, confidence, exp;
 let critic, insult, mockery, taunt;
 let stressRessistance, selfIrony, wit;
 let expProgress, confidenceProgress, availableSkillPoints;
+
 function addNftStats() {
     nftName = document.getElementById('nftName');
     lvl = document.getElementById('lvl');
@@ -256,6 +260,24 @@ function addNftStats() {
     }
 }
 
+function refreshAttacks() {
+    let attacksHolder = document.getElementById('attacks');
+    attacksHolder.innerHTML = '';
+
+    // console.log(currentAttackList);
+    currentAttackList.forEach((attack, index) => {
+        const button = document.createElement('button');
+        const showAttackSelectionModalForWithBindedAttack = showAttackSelectionModalFor.bind({ attackIndex: index + 1, attackType: attack });
+
+        button.onclick = showAttackSelectionModalForWithBindedAttack;
+        const img = document.createElement('img');
+        img.id = `${index+1}-attack-image`;
+        img.src = `${attack}.svg`;
+        button.appendChild(img);
+        attacksHolder.appendChild(button);
+    })
+}
+
 
 function addDataToMainPage() {
     myNftList = document.getElementById('my-nft-list');
@@ -270,16 +292,14 @@ function addDataToMainPage() {
         const myNftLevelH4 = document.createElement('h4');
         const myNftVictoriesH4 = document.createElement('h4');
 
-        // new
         const myNftRaribleBlockH4 = document.createElement('h4');
         const myNftRaribleA = document.createElement('a');
 
         myNftRaribleBlockH4.classList.add('rating-nft-rarible-link');
 
         myNftRaribleA.href = '#'
-        myNftRaribleA.innerHTML = 'Посмотреть на Rarible';
+        myNftRaribleA.innerHTML = 'Перейти к NFT';
         myNftRaribleBlockH4.appendChild(myNftRaribleA);
-        ///
 
         myNftLevelH4.innerHTML = `Уровень: ${item.level}`;
         myNftVictoriesH4.innerHTML = `Побед: ${item.wins}`;
@@ -337,7 +357,7 @@ function addDataToMainPage() {
         nftRaribleBlockH4.classList.add('rating-nft-rarible-link');
 
         nftRaribleA.href = '#'
-        nftRaribleA.innerHTML = 'Посмотреть на Rarible';
+        nftRaribleA.innerHTML = 'Перейти к NFT';
         nftRaribleBlockH4.appendChild(nftRaribleA);
 
         nftDiv.appendChild(nftRatingH1);
@@ -373,12 +393,46 @@ function addDataToMainPage() {
 
 
 function selectNftForGame(nftId = '0') {
-    console.log('selectedNft', nftId);
     loggerElement.innerHTML = '';
 
     mainPage.style = "display: none"
     gamePage.style = ""
+}
 
-    const trainOption = document.getElementById('train-option');
-    trainOption.click();
+let currentAttackList = [
+    'critic',
+    'insult',
+    'critic',
+    'mockery',
+    'taunt'
+]
+
+let modalHolder;
+let modalHolderCloseButton;
+let currentSelectedAttackIndex;
+let currentSelectedAttackType;
+
+function initModals() {
+    modalHolder = document.getElementById('modal-holder');
+}
+
+function closeAttackSelectionModal() {
+    modalHolder.style = "display: none"
+}
+
+function showAttackSelectionModalFor() {
+    const { attackIndex, attackType } = this;
+    currentSelectedAttackIndex = attackIndex;
+
+    currentSelectedAttackType = attackType;
+    modalHolder.style = ""
+}
+
+function selectAttackType(selectedType) {
+    console.log({ currentSelectedAttackIndex, currentSelectedAttackType, selectedType });
+    currentAttackList = currentAttackList.map((attack, index) => (index + 1 === currentSelectedAttackIndex ? selectedType : attack));
+
+    console.log({ currentAttackList });
+    refreshAttacks()
+    closeAttackSelectionModal();
 }
